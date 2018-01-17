@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Switch, Route } from 'react-router';
+import CounterPage from './views/CounterPage';
 
 export default class Routes extends React.Component {
   render() {
@@ -16,7 +17,7 @@ export default class Routes extends React.Component {
           path='/*'
           exact
           render={() => (
-            <h1>others!</h1>
+            <CounterPage />
           )}
         />
       </Switch>

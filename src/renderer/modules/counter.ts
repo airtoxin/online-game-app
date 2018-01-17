@@ -1,4 +1,4 @@
-import { Action } from 'redux';
+import { Action, Dispatch } from 'redux';
 
 export interface CounterState {
   count: number;
@@ -22,6 +22,26 @@ export interface DecrementAction extends Action {
 export type CounterAction =
   | IncrementAction
   | DecrementAction;
+
+export class ActionDispatcher {
+  constructor(private dispatch: Dispatch<any>) { }
+
+  increment(amount: number): void {
+    const action: IncrementAction = {
+      type: ActionNames.Increment,
+      amount,
+    };
+    this.dispatch(action);
+  }
+
+  decrement(amount: number): void {
+    const action: DecrementAction = {
+      type: ActionNames.Decrement,
+      amount,
+    };
+    this.dispatch(action);
+  }
+}
 
 const initialState: CounterState = {
   count: 0,
