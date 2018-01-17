@@ -1,11 +1,18 @@
 import * as React from 'react';
+import { ConnectedRouter } from 'react-router-redux';
+import { Provider } from 'react-redux';
+import store from './store';
+import history from './history';
+import Routes from './Routes';
 
-export class App extends React.Component<undefined, undefined> {
+export class App extends React.Component {
   render() {
     return (
-      <div>
-        <h2>Welcome to React with Typescript!</h2>
-      </div>
+      <Provider store={store}>
+        <ConnectedRouter history={history}>
+          <Routes />
+        </ConnectedRouter>
+      </Provider>
     );
   }
 }
