@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from 'electron';
-import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
+import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
 import { enableLiveReload } from 'electron-compile';
 import { main } from './server';
 
@@ -25,7 +25,10 @@ const createWindow = async () => {
 
   // Open the DevTools.
   if (isDevMode) {
-    await installExtension(REACT_DEVELOPER_TOOLS);
+    await Promise.all([
+      installExtension(REACT_DEVELOPER_TOOLS),
+      installExtension(REDUX_DEVTOOLS),
+    ]);
     mainWindow.webContents.openDevTools();
   }
 
