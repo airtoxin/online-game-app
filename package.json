@@ -47,18 +47,25 @@
     }
   },
   "dependencies": {
-    "@types/electron-devtools-installer": "*",
-    "@types/react": "*",
-    "@types/react-dom": "*",
     "electron-compile": "*",
     "electron-devtools-installer": "*",
     "electron-squirrel-startup": "*",
     "react": "*",
     "react-dom": "*",
     "react-hot-loader": "*",
+    "react-redux": "*",
+    "react-router": "*",
+    "react-router-redux": "*",
+    "redux": "*",
     "tslib": "*"
   },
   "devDependencies": {
+    "@types/electron-devtools-installer": "*",
+    "@types/react": "*",
+    "@types/react-dom": "*",
+    "@types/react-redux": "*",
+    "@types/react-router": "*",
+    "@types/react-router-redux": "*",
     "babel-plugin-transform-async-to-generator": "*",
     "babel-preset-env": "*",
     "babel-preset-react": "*",
