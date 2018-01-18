@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Switch, Route } from 'react-router';
-import CounterPage from './views/CounterPage';
+import LoggedInRoute from './containers/LoggedInRoute';
+import CounterPage from './containers/CounterPage';
+import LoginPage from './containers/LoginPage';
 
 export default class Routes extends React.Component {
   render() {
@@ -10,10 +12,10 @@ export default class Routes extends React.Component {
           path='/login'
           exact
           render={() => (
-            <h1>login!</h1>
+            <LoginPage />
           )}
         />
-        <Route
+        <LoggedInRoute
           path='/*'
           exact
           render={() => (

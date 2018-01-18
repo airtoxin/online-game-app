@@ -6,4 +6,6 @@ import history from './history';
 
 const router = routerMiddleware(history);
 
-export default createStore(reducers, applyMiddleware(router, thunk));
+const store = createStore(reducers, applyMiddleware(router, thunk));
+
+export default store;

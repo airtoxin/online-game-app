@@ -58,8 +58,10 @@
     "react-router": "^4.2.0",
     "react-router-redux": "^5.0.0-alpha.9",
     "redux": "^3.7.2",
+    "redux-form": "^7.2.1",
     "redux-thunk": "^2.2.0",
-    "tslib": "^1.8.1"
+    "tslib": "^1.8.1",
+    "uuid": "^3.2.1"
   },
   "devDependencies": {
     "@types/electron-devtools-installer": "^2.0.2",
@@ -69,7 +71,9 @@
     "@types/react-redux": "^5.0.14",
     "@types/react-router": "^4.0.20",
     "@types/react-router-redux": "^5.0.11",
+    "@types/redux-form": "^7.0.12",
     "@types/redux-thunk": "^2.1.0",
+    "@types/uuid": "^3.4.3",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",

@@ -5,8 +5,8 @@ export interface CounterState {
 }
 
 export enum ActionNames {
-  Increment = 'counter/increment',
-  Decrement = 'counter/decrement',
+  Increment = 'counter/Increment',
+  Decrement = 'counter/Decrement',
 }
 
 export interface IncrementAction extends Action {
