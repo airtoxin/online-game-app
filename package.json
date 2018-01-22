@@ -60,6 +60,8 @@
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "sanitize.css": "^5.0.0",
+    "semantic-ui-css": "^2.2.12",
+    "semantic-ui-react": "^0.77.2",
     "tslib": "^1.8.1",
     "uuid": "^3.2.1"
   },

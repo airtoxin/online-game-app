@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
+import { Form } from 'semantic-ui-react';
 import { GlobalState } from '../../modules/index';
 import { UserState, ActionDispatcher as UserActionDispatcher } from '../../modules/user';
 import { FormEvent, SyntheticEvent } from 'react';
@@ -27,12 +28,12 @@ export class LoginPage extends React.Component<Props, State> {
     return (
       <div>
         <h1>hello {this.props.user.id}</h1>
-        <form onSubmit={this.handleSubmit.bind(this)}>
+        <Form onSubmit={this.handleSubmit.bind(this)}>
           <label>表示ユーザー名</label>
-          <input type='text' value={this.state.name} onChange={this.handleChange.bind(this)}/>
+          <Form.Input type='text' value={this.state.name} onChange={this.handleChange.bind(this)}/>
 
-          <button onSubmit={this.handleSubmit.bind(this)}>OK</button>
-        </form>
+          <Form.Button onSubmit={this.handleSubmit.bind(this)}>OK</Form.Button>
+        </Form>
       </div>
     );
   }
