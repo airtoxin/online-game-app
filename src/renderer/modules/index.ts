@@ -1,4 +1,4 @@
-import { combineReducers, AnyAction } from 'redux';
+import {combineReducers, Reducer} from 'redux';
 import { routerReducer, RouterState } from 'react-router-redux';
 import counter, { CounterState } from './counter';
 import user, { UserState } from './user';
@@ -13,4 +13,4 @@ export default combineReducers({
   counter,
   user,
   routing: routerReducer,
-});
+}) as Reducer<GlobalState>;
