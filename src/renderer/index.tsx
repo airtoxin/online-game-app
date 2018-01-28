@@ -20,5 +20,5 @@ class App extends React.Component {
 
 ReactDom.render(
   <App />,
-  document.getElementById('App'),
+  document.getElementById('app'),
 );

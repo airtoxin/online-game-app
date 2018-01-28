@@ -1,17 +1,11 @@
 import { app, BrowserWindow } from 'electron';
 import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
-import { enableLiveReload } from 'electron-compile';
-import { main } from './server';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow: Electron.BrowserWindow | null = null;
 
-const isDevMode = process.execPath.match(/[\\/]electron/);
-
-if (isDevMode) {
-  enableLiveReload({strategy: 'react-hmr'});
-}
+const isDevelopment = process.env.NODE_ENV !== 'production';
 
 const createWindow = async () => {
   // Create the browser window.
@@ -21,10 +15,14 @@ const createWindow = async () => {
   });
 
   // and load the index.html of the app.
-  mainWindow.loadURL(`file://${__dirname}/../dist/index.html`);
+  const url = isDevelopment
+    ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`
+    : `file://${__dirname}/index.html`;
+  mainWindow.maximize();
+  mainWindow.loadURL(url);
 
   // Open the DevTools.
-  if (isDevMode) {
+  if (isDevelopment) {
     await Promise.all([
       installExtension(REACT_DEVELOPER_TOOLS),
       installExtension(REDUX_DEVTOOLS),
@@ -62,7 +60,3 @@ app.on('activate', () => {
     createWindow();
   }
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and import them here.
-main();
