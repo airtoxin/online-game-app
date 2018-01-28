@@ -5,6 +5,7 @@ import { Form } from 'semantic-ui-react';
 import { GlobalState } from '../../modules/index';
 import { UserState, ActionDispatcher as UserActionDispatcher } from '../../modules/user';
 import { FormEvent, SyntheticEvent } from 'react';
+import * as styles from './styles.cssmodules';
 
 export interface Props {
   user: UserState;
@@ -26,7 +27,7 @@ export class LoginPage extends React.Component<Props, State> {
 
   render() {
     return (
-      <div>
+      <div className={styles.red}>
         <h1>hello {this.props.user.id}</h1>
         <Form onSubmit={this.handleSubmit.bind(this)}>
           <label>表示ユーザー名</label>

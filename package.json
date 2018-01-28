@@ -4,8 +4,13 @@
   "private": true,
   "scripts": {
     "start": "run-p dev",
-    "dev": "electron-webpack dev",
-    "compile": "electron-webpack",
+    "dev": "run-p dev:css:watch dev:app",
+    "dev:css": "tcm --pattern 'src/renderer/**/*.cssmodules'",
+    "dev:css:watch": "npm run dev:css -- --watch",
+    "dev:app": "electron-webpack dev",
+    "compile": "run-s compile:css compile:app",
+    "compile:css": "npm run dev:css",
+    "compile:app": "electron-webpack",
     "clean-install": "rimraf node_modules && yarn install",
     "dist": "yarn clean-install && yarn compile && electron-builder",
     "dist:dir": "yarn dist --dir -c.compression=store -c.mac.identity=null",
@@ -72,8 +77,8 @@
     "style-loader": "^0.19.1",
     "tslib": "^1.8.1",
     "tslint": "^5.9.1",
+    "typed-css-modules": "^0.3.1",
     "typescript": "^2.6.2",
-    "typings-for-css-modules-loader": "^1.7.0",
     "webpack": "^3.10.0"
   }
 }

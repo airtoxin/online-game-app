@@ -1,5 +1,5 @@
-out
 dist
+src/renderer/**/*.cssmodules.d.ts
 
 # Created by https://www.gitignore.io/api/node
 
