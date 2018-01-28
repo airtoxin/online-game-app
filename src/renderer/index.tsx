@@ -5,6 +5,9 @@ import { Provider } from 'react-redux';
 import store from './store';
 import history from './history';
 import Routes from './Routes';
+// inject global css
+import 'sanitize.css/sanitize.css';
+import 'semantic-ui-css/semantic.css';
 
 class App extends React.Component {
   render() {
