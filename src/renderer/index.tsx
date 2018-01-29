@@ -8,6 +8,7 @@ import Routes from './Routes';
 // inject global css
 import 'sanitize.css/sanitize.css';
 import 'semantic-ui-css/semantic.css';
+import './global.css';
 
 class App extends React.Component {
   render() {
