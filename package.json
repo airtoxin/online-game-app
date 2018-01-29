@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "electron-devtools-installer": "^2.2.3",
+    "formik": "^0.10.5",
     "history": "^4.7.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
@@ -60,6 +61,7 @@
   "devDependencies": {
     "@types/electron-devtools-installer": "^2.0.2",
     "@types/history": "^4.6.2",
+    "@types/prop-types": "^15.5.2",
     "@types/react": "^16.0.34",
     "@types/react-dom": "^16.0.3",
     "@types/react-redux": "^5.0.14",

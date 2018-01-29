@@ -2,12 +2,12 @@ import * as React from 'react';
 import {Dispatch} from 'redux';
 import {connect} from 'react-redux';
 import {push} from 'react-router-redux';
-import {Form, Button, InputOnChangeData} from 'semantic-ui-react';
+import {Form, Button} from 'semantic-ui-react';
 import {GlobalState} from '../../modules/index';
 import {UserState, ActionDispatcher as UserActionDispatcher} from '../../modules/user';
-import {FormEvent, SyntheticEvent} from 'react';
 import CenterLayout from '../../components/CenterLayout';
 import * as styles from './styles.cssmodules';
+import {FormikProps, withFormik} from 'formik';
 
 export interface Props {
   user: UserState;
@@ -15,53 +15,42 @@ export interface Props {
   gotoRoot: () => any;
 }
 
-export interface State {
+export interface FormValues {
   name: string;
 }
 
-export class LoginPage extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
+const FormComponent = (props: Props & FormikProps<FormValues>) => {
+  const {user, values, handleChange, handleSubmit} = props;
 
-    this.state = {
-      name: '',
-    };
+  return (
+    <Form className={styles.formContainer} onSubmit={handleSubmit}>
+      <Form.Field>
+        <label>ログインID: {user.id}</label>
+      </Form.Field>
+      <Form.Field>
+        <label>表示名</label>
+        <Form.Input name='name' value={values.name} onChange={handleChange}/>
+      </Form.Field>
+      <Button basic primary type='submit'>ログイン</Button>
+    </Form>
+  );
+};
+
+const FormikForm = withFormik<Props, FormValues>({
+  mapPropsToValues: () => ({name: ''}),
+  handleSubmit: (values, {props}) => {
+    props.userActionDispatcher.createUser(values.name);
+    props.gotoRoot();
   }
+})(FormComponent);
 
+export class LoginPage extends React.Component<Props> {
   render() {
     return (
       <CenterLayout>
-        <Form className={styles.formContainer} onSubmit={this.handleSubmit}>
-          <Form.Field>
-            <label>ログインID: {this.props.user.id}</label>
-          </Form.Field>
-          <Form.Field>
-            <label>表示名</label>
-            <Form.Input value={this.state.name} onChange={this.handleChange}/>
-          </Form.Field>
-          <Button basic primary type='submit' {...this.getButtonState()}>ログイン</Button>
-        </Form>
+        <FormikForm {...this.props} />
       </CenterLayout>
     );
-  }
-
-  getButtonState(): {} {
-    if (this.state.name) return {};
-    else return {
-      disabled: true,
-    };
-  }
-
-  handleChange = (_: SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => {
-    this.setState({
-      name: data.value,
-    });
-  }
-
-  handleSubmit = (event: FormEvent<HTMLElement>): void => {
-    event.preventDefault();
-    this.props.userActionDispatcher.createUser(this.state.name);
-    this.props.gotoRoot();
   }
 }
 
