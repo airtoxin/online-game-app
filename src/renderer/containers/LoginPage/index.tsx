@@ -1,15 +1,17 @@
 import * as React from 'react';
-import { Dispatch } from 'redux';
-import { connect } from 'react-redux';
-import { Form } from 'semantic-ui-react';
-import { GlobalState } from '../../modules/index';
-import { UserState, ActionDispatcher as UserActionDispatcher } from '../../modules/user';
-import { FormEvent, SyntheticEvent } from 'react';
+import {Dispatch} from 'redux';
+import {connect} from 'react-redux';
+import {push} from 'react-router-redux';
+import {Form, Button, InputOnChangeData} from 'semantic-ui-react';
+import {GlobalState} from '../../modules/index';
+import {UserState, ActionDispatcher as UserActionDispatcher} from '../../modules/user';
+import {FormEvent, SyntheticEvent} from 'react';
 import * as styles from './styles.cssmodules';
 
 export interface Props {
   user: UserState;
   userActionDispatcher: UserActionDispatcher;
+  gotoHome: () => any;
 }
 
 export interface State {
@@ -27,28 +29,38 @@ export class LoginPage extends React.Component<Props, State> {
 
   render() {
     return (
-      <div className={styles.red}>
-        <h1>hello {this.props.user.id}</h1>
-        <Form onSubmit={this.handleSubmit.bind(this)}>
-          <label>表示ユーザー名</label>
-          <Form.Input type='text' value={this.state.name} onChange={this.handleChange.bind(this)}/>
-
-          <Form.Button onSubmit={this.handleSubmit.bind(this)}>OK</Form.Button>
+      <div className={styles.container}>
+        <Form className={styles.formContainer} onSubmit={this.handleSubmit}>
+          <Form.Field>
+            <label>ログインID: {this.props.user.id}</label>
+          </Form.Field>
+          <Form.Field>
+            <label>表示名</label>
+            <Form.Input value={this.state.name} onChange={this.handleChange}/>
+          </Form.Field>
+          <Button type='submit' {...this.getButtonState()}>ログイン</Button>
         </Form>
       </div>
     );
   }
 
-  handleChange(event: SyntheticEvent<HTMLInputElement>) {
+  getButtonState(): {} {
+    if (this.state.name) return {};
+    else return {
+      disabled: true,
+    };
+  }
+
+  handleChange = (_: SyntheticEvent<HTMLInputElement>, data: InputOnChangeData) => {
     this.setState({
-      name: event.currentTarget.value,
+      name: data.value,
     });
   }
 
-  handleSubmit(event: FormEvent<HTMLFormElement>): void {
+  handleSubmit = (event: FormEvent<HTMLElement>): void => {
     event.preventDefault();
-    if (!this.state.name) return;
-    console.log(this.state);
+    this.props.userActionDispatcher.createUser(this.state.name);
+    this.props.gotoHome();
   }
 }
 
@@ -58,6 +70,7 @@ const mapStateToProps = (state: GlobalState) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch<GlobalState>) => ({
   userActionDispatcher: new UserActionDispatcher(dispatch),
+  gotoHome: () => dispatch(push('/')),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
