@@ -6,12 +6,13 @@ import {Form, Button, InputOnChangeData} from 'semantic-ui-react';
 import {GlobalState} from '../../modules/index';
 import {UserState, ActionDispatcher as UserActionDispatcher} from '../../modules/user';
 import {FormEvent, SyntheticEvent} from 'react';
+import CenterLayout from '../../components/CenterLayout';
 import * as styles from './styles.cssmodules';
 
 export interface Props {
   user: UserState;
   userActionDispatcher: UserActionDispatcher;
-  gotoHome: () => any;
+  gotoRoot: () => any;
 }
 
 export interface State {
@@ -29,7 +30,7 @@ export class LoginPage extends React.Component<Props, State> {
 
   render() {
     return (
-      <div className={styles.container}>
+      <CenterLayout>
         <Form className={styles.formContainer} onSubmit={this.handleSubmit}>
           <Form.Field>
             <label>ログインID: {this.props.user.id}</label>
@@ -38,9 +39,9 @@ export class LoginPage extends React.Component<Props, State> {
             <label>表示名</label>
             <Form.Input value={this.state.name} onChange={this.handleChange}/>
           </Form.Field>
-          <Button type='submit' {...this.getButtonState()}>ログイン</Button>
+          <Button basic primary type='submit' {...this.getButtonState()}>ログイン</Button>
         </Form>
-      </div>
+      </CenterLayout>
     );
   }
 
@@ -60,7 +61,7 @@ export class LoginPage extends React.Component<Props, State> {
   handleSubmit = (event: FormEvent<HTMLElement>): void => {
     event.preventDefault();
     this.props.userActionDispatcher.createUser(this.state.name);
-    this.props.gotoHome();
+    this.props.gotoRoot();
   }
 }
 
@@ -70,7 +71,7 @@ const mapStateToProps = (state: GlobalState) => ({
 
 const mapDispatchToProps = (dispatch: Dispatch<GlobalState>) => ({
   userActionDispatcher: new UserActionDispatcher(dispatch),
-  gotoHome: () => dispatch(push('/')),
+  gotoRoot: () => dispatch(push('/')),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
