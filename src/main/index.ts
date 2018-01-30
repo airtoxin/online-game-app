@@ -1,4 +1,4 @@
-import {app, BrowserWindow, ipcMain} from 'electron';
+import {app, BrowserWindow, ipcMain, Event} from 'electron';
 import installExtension, {REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} from 'electron-devtools-installer';
 import {Messages} from '../shared/message';
 import Server from './Server';
@@ -63,7 +63,7 @@ app.on('activate', () => {
   }
 });
 
-ipcMain.on(Messages.BOOT_UP_SERVER, (host: string, port: number) => {
+ipcMain.on(Messages.BOOT_UP_SERVER, (_: Event, host: string, port: number) => {
   console.log(host, port);
   const server = new Server();
   server.bootUp(host, port);

@@ -25,7 +25,7 @@ export class ActionDispatcher {
 
   bootUpServer(host: string, port: number) {
     console.log(host, port);
-    ipcRenderer.send(Messages.BOOT_UP_SERVER_SUCCESS, host, port);
+    ipcRenderer.send(Messages.BOOT_UP_SERVER, host, port);
     ipcRenderer.on(Messages.BOOT_UP_SERVER_SUCCESS, () => {
       const action: BootUpServerAction = {
         type: ActionNames.BootUpServer,
