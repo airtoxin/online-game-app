@@ -3,11 +3,11 @@ import {Dispatch} from 'redux';
 import {connect} from 'react-redux';
 import {push} from 'react-router-redux';
 import {Form, Button} from 'semantic-ui-react';
+import {withFormik} from 'formik';
 import {GlobalState} from '../../modules/index';
 import {UserState, ActionDispatcher as UserActionDispatcher} from '../../modules/user';
 import CenterLayout from '../../components/CenterLayout';
 import * as styles from './styles.cssmodules';
-import {withFormik} from 'formik';
 
 export interface Props {
   user: UserState;

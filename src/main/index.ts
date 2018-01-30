@@ -1,5 +1,7 @@
-import { app, BrowserWindow } from 'electron';
-import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
+import {app, BrowserWindow, ipcMain} from 'electron';
+import installExtension, {REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} from 'electron-devtools-installer';
+import {Messages} from '../shared/message';
+import Server from './Server';
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -59,4 +61,10 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow();
   }
+});
+
+ipcMain.on(Messages.BOOT_UP_SERVER, (host: string, port: number) => {
+  console.log(host, port);
+  const server = new Server();
+  server.bootUp(host, port);
 });
