@@ -64,7 +64,6 @@ app.on('activate', () => {
 });
 
 ipcMain.on(Messages.BOOT_UP_SERVER, (_: Event, host: string, port: number) => {
-  console.log(host, port);
   const server = new Server();
   server.bootUp(host, port);
 });
