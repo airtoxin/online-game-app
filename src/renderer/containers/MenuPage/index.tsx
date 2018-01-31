@@ -3,12 +3,13 @@ import {connect} from 'react-redux';
 import {Header, Form, Divider} from 'semantic-ui-react';
 import {withFormik} from 'formik';
 import CenterLayout from '../../components/CenterLayout/index';
-import {ActionDispatcher} from '../../modules/server';
+import {ActionDispatcher as ServerActionDispatcher} from '../../modules/server';
+import ActionDispatcher from './ActionDispatcher';
 import * as styles from './styles.cssmodules';
 import {Dispatch} from 'redux';
 
 export interface Props {
-  serverActionDispatcher: ActionDispatcher;
+  actionDispatcher: ActionDispatcher;
 }
 
 export interface ConnectionFormValues {
@@ -46,7 +47,7 @@ const ConnectionFormArea = withFormik<Props, ConnectionFormValues>({
 const BootingUpFormArea = withFormik<Props, BootingUpFormValues>({
   mapPropsToValues: () => ({host: 'localhost', port: 2008}),
   handleSubmit: (values, { props }) => {
-    props.serverActionDispatcher.bootUpServer(values.host, values.port);
+    props.actionDispatcher.bootUpServer(values.host, values.port);
   },
 })(({
   values,
@@ -89,7 +90,10 @@ class MenuPage extends React.Component<Props> {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<any>) => ({
-  serverActionDispatcher: new ActionDispatcher(dispatch),
+  actionDispatcher: new ActionDispatcher(
+    dispatch,
+    new ServerActionDispatcher(dispatch),
+  ),
 });
 
 export default connect(null, mapDispatchToProps)(MenuPage);

@@ -4,6 +4,7 @@ import LoggedInRoute from './containers/LoggedInRoute';
 import CounterPage from './containers/CounterPage';
 import LoginPage from './containers/LoginPage';
 import MenuPage from './containers/MenuPage';
+import LoungePage from './containers/LoungePage';
 
 export default class Routes extends React.Component {
   render() {
@@ -21,6 +22,13 @@ export default class Routes extends React.Component {
           exact
           render={() => (
             <MenuPage />
+          )}
+        />
+        <LoggedInRoute
+          path='/lounge'
+          exact
+          render={() => (
+            <LoungePage />
           )}
         />
         <LoggedInRoute

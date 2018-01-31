@@ -11,7 +11,10 @@ export default class Server {
         res.send('gameserver is running.');
       });
 
-      http.listen(port, host, resolve);
+      http.listen(port, host, () => {
+        console.log(`running server ${host}:${port}`);
+        resolve();
+      });
     });
   }
 }

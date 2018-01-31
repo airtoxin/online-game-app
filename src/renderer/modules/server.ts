@@ -23,18 +23,21 @@ export type ServerAction =
 export class ActionDispatcher {
   constructor(private dispatch: Dispatch<any>) {}
 
-  bootUpServer(host: string, port: number) {
-    ipcRenderer.send(Messages.BOOT_UP_SERVER, host, port);
-    ipcRenderer.on(Messages.BOOT_UP_SERVER_SUCCESS, () => {
-      const action: BootUpServerAction = {
-        type: ActionNames.BootUpServer,
-        host,
-        port,
-      };
-      this.dispatch(action);
-    });
-    ipcRenderer.on(Messages.BOOT_UP_SERVER_FAILED, () => {
-      console.error('Failed boot up server');
+  bootUpServer(host: string, port: number): Promise<void> {
+    return new Promise((resolve, reject) => {
+      ipcRenderer.send(Messages.BOOT_UP_SERVER, host, port);
+      ipcRenderer.on(Messages.BOOT_UP_SERVER_SUCCESS, () => {
+        const action: BootUpServerAction = {
+          type: ActionNames.BootUpServer,
+          host,
+          port,
+        };
+        this.dispatch(action);
+        resolve();
+      });
+      ipcRenderer.on(Messages.BOOT_UP_SERVER_FAILED, () => {
+        reject();
+      });
     });
   }
 }
@@ -45,6 +48,9 @@ export default (state: ServerState = initialState, action: ServerAction): Server
   switch (action.type) {
     case ActionNames.BootUpServer: {
       return { ...state, host: action.host, port: action.port };
+    }
+    default: {
+      return state;
     }
   }
 };
