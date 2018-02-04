@@ -4,6 +4,6 @@ body {
 }
 
 #app {
-  height: 100%;
+  height: calc(100% - 1em);
   margin: 1em;
 }
