@@ -2,9 +2,10 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {UserState} from '../../modules/user';
 import {GlobalState} from '../../modules';
-import {Divider, Feed, Input} from 'semantic-ui-react';
+import {Divider, Feed, Form} from 'semantic-ui-react';
 import {DraggableCore} from 'react-draggable';
 import * as styles from './styles.cssmodules';
+import {withFormik} from 'formik';
 
 export interface Props {
   user: UserState;
@@ -13,6 +14,35 @@ export interface Props {
 export interface State {
   heightDiff: number;
 }
+
+export interface ChatSendFormValue {
+  message: string;
+}
+
+const ChatSendForm = withFormik<Props, ChatSendFormValue>({
+  mapPropsToValues: () => ({ message: '' }),
+  handleSubmit: (values, {props}) => {
+    console.log('@values', values);
+    console.log('@props', props);
+  },
+})(({
+  values,
+  handleChange,
+  handleSubmit,
+}) => (
+  <Form onSubmit={handleSubmit}>
+    <Form.Input
+      name='message'
+      fluid
+      action='送信'
+      placeholder='Hi, ...'
+      value={values.message}
+      onChange={handleChange}
+    />
+  </Form>
+));
+
+const defaultChatAreaHeight = '5em';
 
 class LoungePage extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -32,12 +62,12 @@ class LoungePage extends React.Component<Props, State> {
           onDrag={(_e, data) => this.setState({ heightDiff: this.state.heightDiff + data.deltaY })}
         >
           <Divider horizontal className={styles.divider}>
-            Chat
+            ラウンジチャット
           </Divider>
         </DraggableCore>
         <div>
           <Feed className={styles.chatArea} style={{
-            height: `calc(5em - ${this.state.heightDiff}px)`,
+            height: `calc(${defaultChatAreaHeight} - ${this.state.heightDiff}px)`,
           }}>
             {
               Array.from(Array(100).keys()).map(() => (
@@ -58,7 +88,7 @@ class LoungePage extends React.Component<Props, State> {
               ))
             }
           </Feed>
-          <Input fluid action='送信' placeholder='Hi, ...' />
+          <ChatSendForm {...this.props}/>
         </div>
       </div>
     );
