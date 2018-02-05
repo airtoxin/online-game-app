@@ -11,12 +11,12 @@ export default class MenuPageActionDispatcher {
 
   async bootUpServer(host: string, port: number) {
     await this.serverActionDispatcher.bootUpServer(host, port);
-    await this.connectToServer(host, port);
-    this.dispatch(push('/lounge'));
+    await this.connectToServer(`http://${host}:${port}`);
   }
 
-  async connectToServer(host: string, port: number) {
-    await websocket.connect(host, port);
+  async connectToServer(address: string) {
+    await websocket.connect(address);
     websocket.setListeners(this.dispatch);
+    this.dispatch(push('/lounge'));
   }
 }

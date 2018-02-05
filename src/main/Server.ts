@@ -3,6 +3,7 @@ import * as express from 'express';
 import * as SocketIo from 'socket.io';
 import User from '../shared/models/User';
 import {ChatMessage, ChatState} from '../shared/models/ChatState';
+import Socket = SocketIO.Socket;
 
 const chatState: ChatState = {
   messages: [],
@@ -20,7 +21,7 @@ export default class Server {
       });
 
       io.on('connect', socket => {
-        socket.emit('hello');
+        this.initializeClientStates(socket);
 
         socket.on('message', (user: User, message: string, callback: Function) => {
           const chatMessage: ChatMessage = {
@@ -41,5 +42,9 @@ export default class Server {
         resolve();
       });
     });
+  }
+
+  private initializeClientStates(socket: Socket) {
+    socket.emit('update-chatState', chatState);
   }
 }

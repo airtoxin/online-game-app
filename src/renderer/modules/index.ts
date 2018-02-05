@@ -20,4 +20,8 @@ const rootReducer = combineReducers({
   routing: routerReducer,
 });
 
-export default persistReducer({ key: 'root', storage }, rootReducer);
+export default persistReducer({
+  key: 'root',
+  storage,
+  blacklist: ['chatState'],
+}, rootReducer);

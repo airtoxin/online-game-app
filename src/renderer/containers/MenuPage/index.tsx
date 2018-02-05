@@ -23,8 +23,8 @@ export interface BootingUpFormValues {
 
 const ConnectionFormArea = withFormik<Props, ConnectionFormValues>({
   mapPropsToValues: () => ({address: 'http://localhost:2008'}),
-  handleSubmit: values => {
-    console.log(values);
+  handleSubmit: (values, {props}) => {
+    props.actionDispatcher.connectToServer(values.address);
   },
 })(({
   values,

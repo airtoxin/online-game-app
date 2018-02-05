@@ -6,13 +6,11 @@ export class Websocket {
   private socket: SocketIOClient.Socket;
   private listening: boolean;
 
-  connect(host: string, port: number): Promise<void> {
+  connect(address: string): Promise<void> {
     return new Promise(resolve => {
-      this.socket = io(`http://${host}:${port}`);
+      this.socket = io(address);
 
       this.socket.on('connect', resolve);
-
-      this.socket.on('hello', () => console.warn('HELLO!!!!!!!!'));
 
       this.socket.on('update-chatState', (chatState: ChatState) => console.log(chatState));
     });
