@@ -17,5 +17,6 @@ export default class MenuPageActionDispatcher {
 
   async connectToServer(host: string, port: number) {
     await websocket.connect(host, port);
+    websocket.setListeners(this.dispatch);
   }
 }

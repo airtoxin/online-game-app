@@ -1,8 +1,10 @@
 import * as io from 'socket.io-client';
 import {ChatState} from '../../shared/models/ChatState';
+import {Dispatch} from 'redux';
 
 export class Websocket {
   private socket: SocketIOClient.Socket;
+  private listening: boolean;
 
   connect(host: string, port: number): Promise<void> {
     return new Promise(resolve => {
@@ -21,6 +23,20 @@ export class Websocket {
       await this.waitUntilConnect();
 
       this.socket.emit(eventName, ...args, resolve);
+    });
+  }
+
+  async setListeners(dispatch: Dispatch<any>) {
+    if (this.listening) return;
+    this.listening = true;
+
+    await this.waitUntilConnect();
+
+    this.socket.on('update-chatState', (chatState: ChatState) => {
+      dispatch({
+        type: 'update-chatState',
+        chatState,
+      });
     });
   }
 

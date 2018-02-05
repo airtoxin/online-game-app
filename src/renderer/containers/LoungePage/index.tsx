@@ -9,9 +9,11 @@ import {withFormik} from 'formik';
 import ActionDispatcher from './ActionDispatcher';
 import {Dispatch} from 'redux';
 import User from '../../../shared/models/User';
+import {ChatState} from '../../modules/chatState';
 
 export interface Props {
   user: UserState;
+  chatState: ChatState;
   actionDispatcher: ActionDispatcher;
 }
 
@@ -74,21 +76,14 @@ class LoungePage extends React.Component<Props, State> {
             height: `calc(${defaultChatAreaHeight} - ${this.state.heightDiff}px)`,
           }}>
             {
-              Array.from(Array(100).keys()).map(() => (
-                <>
-                  <Feed.Event>
-                    <Feed.Label icon='user' />
-                    <Feed.Content>
-                      You added Elliot Fu to the group <a>Coworkers</a>
-                    </Feed.Content>
-                  </Feed.Event>
-                  <Feed.Event>
-                    <Feed.Label icon='user outline' />
-                    <Feed.Content>
-                      You added Elliot Fu to the group <a>Coworkers</a>
-                    </Feed.Content>
-                  </Feed.Event>
-                </>
+              this.props.chatState.messages.map(message => (
+                <Feed.Event key={message.id}>
+                  <Feed.Label icon={message.user.id === this.props.user.id ? 'user' : 'user outline'} />
+                  <Feed.Content>
+                    {message.message}
+                  </Feed.Content>
+                  <Feed.Date>{message.createdAt}</Feed.Date>
+                </Feed.Event>
               ))
             }
           </Feed>
@@ -101,6 +96,7 @@ class LoungePage extends React.Component<Props, State> {
 
 const mapStateToProps = (state: GlobalState) => ({
   user: state.user,
+  chatState: state.chatState,
 });
 
 const mapDispatchToProps = (_dispatch: Dispatch<GlobalState>) => ({

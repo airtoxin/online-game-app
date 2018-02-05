@@ -29,7 +29,7 @@ export default class Server {
             message,
             createdAt: new Date().toISOString(),
           };
-          chatState.messages = chatState.messages.concat([chatMessage]);
+          chatState.messages = [chatMessage].concat(chatState.messages);
 
           io.sockets.emit('update-chatState', chatState);
           callback();
