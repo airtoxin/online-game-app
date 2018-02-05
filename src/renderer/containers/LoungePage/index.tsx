@@ -6,9 +6,13 @@ import {Divider, Feed, Form} from 'semantic-ui-react';
 import {DraggableCore} from 'react-draggable';
 import * as styles from './styles.cssmodules';
 import {withFormik} from 'formik';
+import ActionDispatcher from './ActionDispatcher';
+import {Dispatch} from 'redux';
+import User from '../../../shared/models/User';
 
 export interface Props {
   user: UserState;
+  actionDispatcher: ActionDispatcher;
 }
 
 export interface State {
@@ -22,8 +26,8 @@ export interface ChatSendFormValue {
 const ChatSendForm = withFormik<Props, ChatSendFormValue>({
   mapPropsToValues: () => ({ message: '' }),
   handleSubmit: (values, {props}) => {
-    console.log('@values', values);
-    console.log('@props', props);
+    const user: User = { name: '', ...props.user };
+    props.actionDispatcher.sendChatMessage(user, values.message);
   },
 })(({
   values,
@@ -99,4 +103,8 @@ const mapStateToProps = (state: GlobalState) => ({
   user: state.user,
 });
 
-export default connect(mapStateToProps)(LoungePage);
+const mapDispatchToProps = (_dispatch: Dispatch<GlobalState>) => ({
+  actionDispatcher: new ActionDispatcher(),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoungePage);
