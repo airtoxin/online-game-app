@@ -4,7 +4,9 @@ import * as SocketIo from 'socket.io';
 import User from '../shared/models/User';
 import {ChatMessage, ChatState} from '../shared/models/ChatState';
 import Socket = SocketIO.Socket;
+import {Messages} from '../shared/message';
 
+// TODO: state management
 const chatState: ChatState = {
   messages: [],
 };
@@ -17,7 +19,7 @@ export default class Server {
       const io = SocketIo(http);
 
       app.get('/', (_, res) => {
-        res.send('gameserver is running.');
+        res.send('game server is running.');
       });
 
       io.on('connect', socket => {
@@ -32,7 +34,7 @@ export default class Server {
           };
           chatState.messages = [chatMessage].concat(chatState.messages);
 
-          io.sockets.emit('update-chatState', chatState);
+          io.sockets.emit(Messages.UPDATE_CHAT_STATE, chatState);
           callback();
         });
       });
@@ -45,6 +47,6 @@ export default class Server {
   }
 
   private initializeClientStates(socket: Socket) {
-    socket.emit('update-chatState', chatState);
+    socket.emit(Messages.UPDATE_CHAT_STATE, chatState);
   }
 }

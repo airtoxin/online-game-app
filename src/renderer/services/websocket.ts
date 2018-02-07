@@ -1,6 +1,7 @@
 import * as io from 'socket.io-client';
 import {ChatState} from '../../shared/models/ChatState';
 import {Dispatch} from 'redux';
+import {Messages} from '../../shared/message';
 
 export class Websocket {
   private socket: SocketIOClient.Socket;
@@ -12,7 +13,7 @@ export class Websocket {
 
       this.socket.on('connect', resolve);
 
-      this.socket.on('update-chatState', (chatState: ChatState) => console.log(chatState));
+      this.socket.on(Messages.UPDATE_CHAT_STATE, (chatState: ChatState) => console.log(chatState));
     });
   }
 
@@ -30,9 +31,9 @@ export class Websocket {
 
     await this.waitUntilConnect();
 
-    this.socket.on('update-chatState', (chatState: ChatState) => {
+    this.socket.on(Messages.UPDATE_CHAT_STATE, (chatState: ChatState) => {
       dispatch({
-        type: 'update-chatState',
+        type: Messages.UPDATE_CHAT_STATE,
         chatState,
       });
     });
