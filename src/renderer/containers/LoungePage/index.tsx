@@ -6,15 +6,14 @@ import {Divider, Feed, Form} from 'semantic-ui-react';
 import {DraggableCore} from 'react-draggable';
 import * as styles from './styles.cssmodules';
 import {withFormik} from 'formik';
-import ActionDispatcher from './ActionDispatcher';
 import {Dispatch} from 'redux';
 import User from '../../../shared/models/User';
-import {ChatState} from '../../modules/chatState';
+import {ChatState, ChatStateActionDispatcher} from '../../modules/chatState';
 
 export interface Props {
   user: UserState;
   chatState: ChatState;
-  actionDispatcher: ActionDispatcher;
+  chatStateActionDispatcher: ChatStateActionDispatcher;
 }
 
 export interface State {
@@ -27,9 +26,9 @@ export interface ChatSendFormValue {
 
 const ChatSendForm = withFormik<Props, ChatSendFormValue>({
   mapPropsToValues: () => ({ message: '' }),
-  handleSubmit: (values, {props, resetForm}) => {
+  handleSubmit: async (values, {props, resetForm}) => {
     const user: User = { name: '', ...props.user };
-    props.actionDispatcher.sendChatMessage(user, values.message);
+    await props.chatStateActionDispatcher.sendChatMessage(user, values.message);
     resetForm();
   },
 })(({
@@ -101,7 +100,7 @@ const mapStateToProps = (state: GlobalState) => ({
 });
 
 const mapDispatchToProps = (_dispatch: Dispatch<GlobalState>) => ({
-  actionDispatcher: new ActionDispatcher(),
-})
+  chatStateActionDispatcher: new ChatStateActionDispatcher(),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoungePage);

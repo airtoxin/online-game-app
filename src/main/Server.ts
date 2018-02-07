@@ -25,7 +25,7 @@ export default class Server {
       io.on('connect', socket => {
         this.initializeClientStates(socket);
 
-        socket.on('message', (user: User, message: string, callback: Function) => {
+        socket.on(Messages.CHAT_MESSAGE, (user: User, message: string, callback: Function) => {
           const chatMessage: ChatMessage = {
             id: `${Math.random()}`,
             user,
