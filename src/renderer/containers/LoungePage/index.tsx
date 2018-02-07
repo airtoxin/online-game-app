@@ -27,9 +27,10 @@ export interface ChatSendFormValue {
 
 const ChatSendForm = withFormik<Props, ChatSendFormValue>({
   mapPropsToValues: () => ({ message: '' }),
-  handleSubmit: (values, {props}) => {
+  handleSubmit: (values, {props, resetForm}) => {
     const user: User = { name: '', ...props.user };
     props.actionDispatcher.sendChatMessage(user, values.message);
+    resetForm();
   },
 })(({
   values,
