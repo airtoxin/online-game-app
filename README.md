@@ -2,6 +2,17 @@
 
 ## Need to know
 
+### Need rebuild
+
+Execute those codes after installing modules.
+
+```sh
+npm install --save-dev electron-rebuild
+./node_modules/.bin/electron-rebuild
+```
+
+[details](https://electronjs.org/docs/tutorial/using-native-node-modules)
+
 ### css-modules
 
 `electron-webpack` provides `.css` file configuration automatically, but that one was not suit for css-modules.

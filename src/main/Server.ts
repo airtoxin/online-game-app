@@ -1,6 +1,7 @@
 import { Server as HttpServer } from 'http';
 import * as express from 'express';
 import * as SocketIo from 'socket.io';
+import * as PouchDb from 'pouchdb';
 import User from '../shared/models/User';
 import {ChatMessage, ChatState} from '../shared/models/ChatState';
 import Socket = SocketIO.Socket;
@@ -21,6 +22,9 @@ export default class Server {
       app.get('/', (_, res) => {
         res.send('game server is running.');
       });
+
+      // tslint:disable-next-line:no-require-imports
+      app.use('/db', require('express-pouchdb')(PouchDb));
 
       io.on('connect', socket => {
         this.initializeClientStates(socket);
