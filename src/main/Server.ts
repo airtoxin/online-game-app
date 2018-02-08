@@ -1,5 +1,6 @@
 import { Server as HttpServer } from 'http';
 import * as express from 'express';
+import * as cors from 'cors';
 import * as SocketIo from 'socket.io';
 import * as PouchDb from 'pouchdb';
 import User from '../shared/models/User';
@@ -19,12 +20,21 @@ export default class Server {
       const http = new HttpServer(app);
       const io = SocketIo(http);
 
+      app.use(cors());
+
       app.get('/', (_, res) => {
         res.send('game server is running.');
       });
 
       // tslint:disable-next-line:no-require-imports
       app.use('/db', require('express-pouchdb')(PouchDb));
+      const db = new PouchDb('mydb');
+      db.put({
+        _id: 'hoge',
+        yo: 'hello',
+      }).then(() => {
+        db.allDocs().then(console.log);
+      });
 
       io.on('connect', socket => {
         this.initializeClientStates(socket);
