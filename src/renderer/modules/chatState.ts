@@ -3,6 +3,7 @@ import {Messages} from '../../shared/message';
 import {Action} from 'redux';
 import User from '../../shared/models/User';
 import websocket from '../services/websocket';
+import {AddLoungeChatMessageEmitter} from '../../shared/models/emitters/AddLoungeChatMessageEmitter';
 
 export {ChatState} from '../../shared/models/ChatState';
 
@@ -19,8 +20,8 @@ const initialState: ChatState = {
 };
 
 export class ChatStateActionDispatcher {
-  async sendChatMessage(user: User, message: string) {
-    await websocket.emit(Messages.CHAT_MESSAGE, user, message);
+  sendChatMessage(user: User, message: string) {
+    return new Promise(resolve => new AddLoungeChatMessageEmitter(websocket.socket).emit(user, message, resolve));
   }
 }
 

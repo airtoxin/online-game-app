@@ -1,26 +1,11 @@
-import { app } from 'electron';
-import { ensureDirSync } from 'fs-extra';
-import * as path from 'path';
 import { Server as HttpServer } from 'http';
 import * as express from 'express';
 import * as cors from 'cors';
 import * as SocketIo from 'socket.io';
-import * as PouchDb from 'pouchdb';
-import User from '../../shared/models/User';
-import {ChatMessage, ChatState} from '../../shared/models/ChatState';
-import Socket = SocketIO.Socket;
-import {Messages} from '../../shared/message';
-
-const pouchDir = path.join(app.getPath('userData'), 'pouchdb');
-
-ensureDirSync(pouchDir);
-
-const DB = PouchDb.defaults({ prefix: path.join(pouchDir, 'db') } as any);
-
-// TODO: state management
-const chatState: ChatState = {
-  messages: [],
-};
+import {StatusController} from './controllers/StatusController';
+import {AddLoungeChatMessageEmitter} from '../../shared/models/emitters/AddLoungeChatMessageEmitter';
+import {LoungeChatController} from './controllers/LoungeChatController';
+import {UpdateLoungeChatMessageEmitter} from '../../shared/models/emitters/UpdateLoungeChatMessageEmitter';
 
 export default class Server {
   bootUp(host: string, port: number): Promise<void> {
@@ -31,35 +16,12 @@ export default class Server {
 
       app.use(cors());
 
-      app.get('/', (_, res) => {
-        res.send('game server is running.');
-      });
-
-      // tslint:disable-next-line:no-require-imports
-      app.use('/db', require('express-pouchdb')(DB, { logPath: path.join(pouchDir, 'log.txt') }));
-      const db = new DB('mydb');
-      db.put({
-        _id: 'hoge',
-        yo: 'hello',
-      }).then(() => {
-        db.allDocs().then(console.log);
-      });
+      app.get('/', StatusController.getStatus);
 
       io.on('connect', socket => {
-        this.initializeClientStates(socket);
-
-        socket.on(Messages.CHAT_MESSAGE, (user: User, message: string, callback: Function) => {
-          const chatMessage: ChatMessage = {
-            id: `${Math.random()}`,
-            user,
-            message,
-            createdAt: new Date().toISOString(),
-          };
-          chatState.messages = [chatMessage].concat(chatState.messages);
-
-          io.sockets.emit(Messages.UPDATE_CHAT_STATE, chatState);
-          callback();
-        });
+        new LoungeChatController(socket, io.sockets)
+          .accept(new AddLoungeChatMessageEmitter(socket))
+          .accept(new UpdateLoungeChatMessageEmitter(socket));
       });
 
       http.listen(port, host, () => {
@@ -67,9 +29,5 @@ export default class Server {
         resolve();
       });
     });
-  }
-
-  private initializeClientStates(socket: Socket) {
-    socket.emit(Messages.UPDATE_CHAT_STATE, chatState);
   }
 }

@@ -1,10 +1,10 @@
 import * as io from 'socket.io-client';
-import {ChatState} from '../../shared/models/ChatState';
 import {Dispatch} from 'redux';
 import {Messages} from '../../shared/message';
+import {UpdateLoungeChatMessageEmitter} from '../../shared/models/emitters/UpdateLoungeChatMessageEmitter';
 
 export class Websocket {
-  private socket: SocketIOClient.Socket;
+  public socket: SocketIOClient.Socket;
   private listening: boolean;
 
   connect(address: string): Promise<void> {
@@ -13,7 +13,7 @@ export class Websocket {
 
       this.socket.on('connect', resolve);
 
-      this.socket.on(Messages.UPDATE_CHAT_STATE, (chatState: ChatState) => console.log(chatState));
+      new UpdateLoungeChatMessageEmitter(this.socket).listen(chatState => console.log(chatState));
     });
   }
 
@@ -31,7 +31,7 @@ export class Websocket {
 
     await this.waitUntilConnect();
 
-    this.socket.on(Messages.UPDATE_CHAT_STATE, (chatState: ChatState) => {
+    new UpdateLoungeChatMessageEmitter(this.socket).listen(chatState => {
       dispatch({
         type: Messages.UPDATE_CHAT_STATE,
         chatState,
