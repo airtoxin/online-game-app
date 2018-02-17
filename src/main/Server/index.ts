@@ -6,10 +6,10 @@ import * as express from 'express';
 import * as cors from 'cors';
 import * as SocketIo from 'socket.io';
 import * as PouchDb from 'pouchdb';
-import User from '../shared/models/User';
-import {ChatMessage, ChatState} from '../shared/models/ChatState';
+import User from '../../shared/models/User';
+import {ChatMessage, ChatState} from '../../shared/models/ChatState';
 import Socket = SocketIO.Socket;
-import {Messages} from '../shared/message';
+import {Messages} from '../../shared/message';
 
 const pouchDir = path.join(app.getPath('userData'), 'pouchdb');
 
