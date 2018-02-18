@@ -1,14 +1,17 @@
 import {ChatState} from '../../shared/models/ChatState';
-import {Messages} from '../../shared/message';
 import {Action} from 'redux';
 import User from '../../shared/models/User';
 import websocket from '../services/websocket';
-import {AddLoungeChatMessageEmitter} from '../../shared/models/emitters/AddLoungeChatMessageEmitter';
+import {Messages} from '../../shared/message';
 
 export {ChatState} from '../../shared/models/ChatState';
 
+export enum ChatStateActionNames {
+  UpdateChatState = 'chatState/UpdateChatState',
+}
+
 export interface UpdateChatStateAction extends Action {
-  type: Messages.UPDATE_CHAT_STATE;
+  type: ChatStateActionNames.UpdateChatState;
   chatState: ChatState;
 }
 
@@ -21,12 +24,14 @@ const initialState: ChatState = {
 
 export class ChatStateActionDispatcher {
   sendChatMessage(user: User, message: string) {
-    return new Promise(resolve => new AddLoungeChatMessageEmitter(websocket.socket).emit(user, message, resolve));
+    return new Promise(resolve => {
+      websocket.emit(Messages.LOUNGE_CHAT_ADD_MESSAGE, user, message, resolve);
+    });
   }
 }
 
 export default (state: ChatState = initialState, action: ChatStateAction): ChatState => {
-  if (action.type === Messages.UPDATE_CHAT_STATE) {
+  if (action.type === ChatStateActionNames.UpdateChatState) {
     return action.chatState;
   }
   return state;

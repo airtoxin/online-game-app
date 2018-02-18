@@ -1,42 +1,36 @@
 import * as io from 'socket.io-client';
-import {Dispatch} from 'redux';
-import {Messages} from '../../shared/message';
 import {UpdateLoungeChatMessageEmitter} from '../../shared/models/emitters/UpdateLoungeChatMessageEmitter';
 
 export class Websocket {
-  public socket: SocketIOClient.Socket;
-  private listening: boolean;
+  private instance
+  private constructor(
+    private socket: SocketIOClient.Socket,
+  ) {}
 
-  connect(address: string): Promise<void> {
+  connect(address: string): Promise<Websocket> {
     return new Promise(resolve => {
       this.socket = io(address);
 
-      this.socket.on('connect', resolve);
-
-      new UpdateLoungeChatMessageEmitter(this.socket).listen(chatState => console.log(chatState));
+      this.socket.on('connect', () => resolve(new Websocket(this.socket)));
     });
   }
 
-  emit(eventName: string, ...args: any[]): Promise<void> {
-    return new Promise(async resolve => {
-      await this.waitUntilConnect();
-
-      this.socket.emit(eventName, ...args, resolve);
-    });
-  }
-
-  async setListeners(dispatch: Dispatch<any>) {
-    if (this.listening) return;
-    this.listening = true;
-
+  async emit(eventName: string, ...args: any[]): Promise<void> {
     await this.waitUntilConnect();
 
-    new UpdateLoungeChatMessageEmitter(this.socket).listen(chatState => {
-      dispatch({
-        type: Messages.UPDATE_CHAT_STATE,
-        chatState,
-      });
-    });
+    this.socket.emit(eventName, ...args);
+  }
+
+  async on(eventName: string, listener: Function): Promise<void> {
+    await this.waitUntilConnect();
+
+    this.socket.on(eventName, listener);
+  }
+
+  async once(eventName: string, listener: Function): Promise<void> {
+    await this.waitUntilConnect();
+
+    this.socket.once(eventName, listener);
   }
 
   private waitUntilConnect(): Promise<void> {
