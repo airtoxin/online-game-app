@@ -3,10 +3,9 @@ import {connect} from 'react-redux';
 import {Header, Form, Divider} from 'semantic-ui-react';
 import {withFormik} from 'formik';
 import CenterLayout from '../../components/CenterLayout/index';
-import {ActionDispatcher as ServerActionDispatcher} from '../../modules/server';
 import * as styles from './styles.cssmodules';
 import {Dispatch} from 'redux';
-import MenuPageActionDispatcher from './ActionDispatcher';
+import {MenuPageActionDispatcher} from '../../modules/menuPage';
 
 export interface Props {
   actionDispatcher: MenuPageActionDispatcher;
@@ -89,11 +88,8 @@ class MenuPage extends React.Component<Props> {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<any>) => ({
-  actionDispatcher: new MenuPageActionDispatcher(
-    dispatch,
-    new ServerActionDispatcher(dispatch),
-  ),
+const mapDispatchToProps = (_dispatch: Dispatch<any>) => ({
+  actionDispatcher: new MenuPageActionDispatcher(),
 });
 
 export default connect(null, mapDispatchToProps)(MenuPage);

@@ -20,7 +20,7 @@ export interface BootUpServerAction extends Action {
 export type ServerAction =
   | BootUpServerAction;
 
-export class ActionDispatcher {
+export class ServerActionDispatcher {
   constructor(private dispatch: Dispatch<any>) {}
 
   bootUpServer(host: string, port: number): Promise<void> {
