@@ -65,7 +65,10 @@ app.on('activate', () => {
 
 ipcMain.on(Messages.BOOT_UP_SERVER, async (event: Event, host: string, port: number) => {
   const server = new Server();
-  await server.bootUp(host, port);
-
-  event.sender.send(Messages.BOOT_UP_SERVER_SUCCESS);
+  try {
+    await server.bootUp(host, port);
+    event.sender.send(Messages.BOOT_UP_SERVER_SUCCESS);
+  } catch {
+    event.sender.send(Messages.BOOT_UP_SERVER_FAILED);
+  }
 });

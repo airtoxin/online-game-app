@@ -96,6 +96,7 @@ class MenuPage extends React.Component<Props> {
 
 const mapDispatchToProps = (dispatch: Dispatch<any>) => ({
   presenter: new MenuPagePresenter(
+    dispatch,
     new WebsocketActionDispatcher(dispatch),
     new ServerActionDispatcher(dispatch),
   ),

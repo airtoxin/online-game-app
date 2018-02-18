@@ -8,7 +8,7 @@ import User from '../../shared/models/User';
 
 export default class Server {
   bootUp(host: string, port: number): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       const app = express();
       const http = new HttpServer(app);
       const io = SocketIo(http);
@@ -30,10 +30,14 @@ export default class Server {
         });
       });
 
-      http.listen(port, host, () => {
-        console.log(`running server ${host}:${port}`);
-        resolve();
-      });
+      try {
+        http.listen(port, host, () => {
+          console.log(`running server ${host}:${port}`);
+          resolve();
+        });
+      } catch {
+        reject();
+      }
     });
   }
 }
