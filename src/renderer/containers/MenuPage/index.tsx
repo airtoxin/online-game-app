@@ -5,25 +5,23 @@ import {withFormik} from 'formik';
 import CenterLayout from '../../components/CenterLayout/index';
 import * as styles from './styles.cssmodules';
 import {Dispatch} from 'redux';
-import {MenuPageActionDispatcher} from '../../modules/menuPage';
+import {MenuPagePresenter} from './presenter';
+import {WebsocketActionDispatcher} from '../../modules/websocket';
+import {ServerActionDispatcher} from '../../modules/server';
 
 export interface Props {
-  actionDispatcher: MenuPageActionDispatcher;
+  presenter: MenuPagePresenter;
 }
 
-export interface ConnectionFormValues {
-  address: string;
-}
-
-export interface BootingUpFormValues {
+export interface FormValues {
   host: string;
   port: number;
 }
 
-const ConnectionFormArea = withFormik<Props, ConnectionFormValues>({
-  mapPropsToValues: () => ({address: 'http://localhost:2008'}),
+const ConnectionFormArea = withFormik<Props, FormValues>({
+  mapPropsToValues: () => ({ host: 'localhost', port: 2008 }),
   handleSubmit: (values, {props}) => {
-    props.actionDispatcher.connectToServer(values.address);
+    props.presenter.connectToServer(values.host, values.port);
   },
 })(({
   values,
@@ -32,21 +30,29 @@ const ConnectionFormArea = withFormik<Props, ConnectionFormValues>({
 }) => (
   <Form className={styles.container} onSubmit={handleSubmit}>
     <Header size='large'>サーバーに接続する</Header>
-    <label>サーバーアドレス</label>
+    <label>サーバーホスト</label>
     <Form.Input
-      name='address'
-      placeholder='http://localhost:2008'
-      value={values.address}
+      name='host'
+      placeholder='localhost'
+      value={values.host}
+      onChange={handleChange}
+    />
+    <label>サーバーポート</label>
+    <Form.Input
+      name='port'
+      type='number'
+      placeholder={2008}
+      value={values.port}
       onChange={handleChange}
     />
     <Form.Button type='submit' basic primary>接続</Form.Button>
   </Form>
 ));
 
-const BootingUpFormArea = withFormik<Props, BootingUpFormValues>({
+const BootingUpFormArea = withFormik<Props, FormValues>({
   mapPropsToValues: () => ({host: 'localhost', port: 2008}),
   handleSubmit: (values, { props }) => {
-    props.actionDispatcher.bootUpServer(values.host, values.port);
+    props.presenter.bootUpServer(values.host, values.port);
   },
 })(({
   values,
@@ -88,8 +94,11 @@ class MenuPage extends React.Component<Props> {
   }
 }
 
-const mapDispatchToProps = (_dispatch: Dispatch<any>) => ({
-  actionDispatcher: new MenuPageActionDispatcher(),
+const mapDispatchToProps = (dispatch: Dispatch<any>) => ({
+  presenter: new MenuPagePresenter(
+    new WebsocketActionDispatcher(dispatch),
+    new ServerActionDispatcher(dispatch),
+  ),
 });
 
 export default connect(null, mapDispatchToProps)(MenuPage);

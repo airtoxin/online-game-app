@@ -3,6 +3,8 @@ import * as express from 'express';
 import * as cors from 'cors';
 import * as SocketIo from 'socket.io';
 import {StatusController} from './controllers/StatusController';
+import {LoungeChatController} from './controllers/LoungeChatController';
+import User from '../../shared/models/User';
 
 export default class Server {
   bootUp(host: string, port: number): Promise<void> {
@@ -13,10 +15,19 @@ export default class Server {
 
       app.use(cors());
 
-      app.get('/', StatusController.getStatus);
+      // status routes
+      app.get('/status', new StatusController().getStatus);
+      const statusNamespace = io.of('/status');
+      statusNamespace.on('connect', () => {});
 
-      io.on('connect', socket => {
-        socket.on('*', console.log);
+      // lounge-chat routes
+      const loungeChatNamespace = io.of('/lounge-chat');
+      loungeChatNamespace.on('connect', socket => {
+        const controller = new LoungeChatController();
+        socket.on('add', async (user: User, message: string) => {
+          const loungeChat = await controller.add(user, message);
+          loungeChatNamespace.emit('update', loungeChat);
+        });
       });
 
       http.listen(port, host, () => {
