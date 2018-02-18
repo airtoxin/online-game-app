@@ -17,3 +17,5 @@ const rootReducer = combineReducers({
   chatState,
   routing: routerReducer,
 });
+
+export default rootReducer;

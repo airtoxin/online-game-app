@@ -3,9 +3,6 @@ import * as express from 'express';
 import * as cors from 'cors';
 import * as SocketIo from 'socket.io';
 import {StatusController} from './controllers/StatusController';
-import {AddLoungeChatMessageEmitter} from '../../shared/models/emitters/AddLoungeChatMessageEmitter';
-import {LoungeChatController} from './controllers/LoungeChatController';
-import {UpdateLoungeChatMessageEmitter} from '../../shared/models/emitters/UpdateLoungeChatMessageEmitter';
 
 export default class Server {
   bootUp(host: string, port: number): Promise<void> {
@@ -19,9 +16,7 @@ export default class Server {
       app.get('/', StatusController.getStatus);
 
       io.on('connect', socket => {
-        new LoungeChatController(socket, io.sockets)
-          .accept(new AddLoungeChatMessageEmitter(socket))
-          .accept(new UpdateLoungeChatMessageEmitter(socket));
+        socket.on('*', console.log);
       });
 
       http.listen(port, host, () => {
