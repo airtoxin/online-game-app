@@ -8,6 +8,7 @@ import {withFormik} from 'formik';
 import User from '../../../shared/models/User';
 import {ChatState} from '../../modules/chatState';
 import {LoungePagePresenter} from './LoungePagePresenter';
+import {WithSocket} from '../WithSocket';
 
 export interface Props {
   user: User;
@@ -59,36 +60,43 @@ class LoungePage extends React.Component<Props, State> {
 
   render() {
     return (
-      <div className={styles.container}>
-        <div className={styles.mainArea}>
-          <h1>{this.props.user.name}</h1>
-        </div>
-        <DraggableCore
-          onDrag={(_e, data) => this.setState({ heightDiff: this.state.heightDiff + data.deltaY })}
-        >
-          <Divider horizontal className={styles.divider}>
-            ラウンジチャット
-          </Divider>
-        </DraggableCore>
-        <div>
-          <Feed className={styles.chatArea} style={{
-            height: `calc(${defaultChatAreaHeight} - ${this.state.heightDiff}px)`,
-          }}>
-            {
-              this.props.chatState.messages.map(message => (
-                <Feed.Event key={message.id}>
-                  <Feed.Label icon={message.user.id === this.props.user.id ? 'user' : 'user outline'} />
-                  <Feed.Content>
-                    {message.message}
-                  </Feed.Content>
-                  <Feed.Date>{message.createdAt}</Feed.Date>
-                </Feed.Event>
-              ))
-            }
-          </Feed>
-          <ChatSendForm {...this.props}/>
-        </div>
-      </div>
+      <WithSocket
+        host='localhost'
+        port={2008}
+        path='lounge-chat'
+        render={() => (
+          <div className={styles.container}>
+            <div className={styles.mainArea}>
+              <h1>{this.props.user.name}</h1>
+            </div>
+            <DraggableCore
+              onDrag={(_e, data) => this.setState({ heightDiff: this.state.heightDiff + data.deltaY })}
+            >
+              <Divider horizontal className={styles.divider}>
+                ラウンジチャット
+              </Divider>
+            </DraggableCore>
+            <div>
+              <Feed className={styles.chatArea} style={{
+                height: `calc(${defaultChatAreaHeight} - ${this.state.heightDiff}px)`,
+              }}>
+                {
+                  this.props.chatState.messages.map(message => (
+                    <Feed.Event key={message.id}>
+                      <Feed.Label icon={message.user.id === this.props.user.id ? 'user' : 'user outline'} />
+                      <Feed.Content>
+                        {message.message}
+                      </Feed.Content>
+                      <Feed.Date>{message.createdAt}</Feed.Date>
+                    </Feed.Event>
+                  ))
+                }
+              </Feed>
+              <ChatSendForm {...this.props}/>
+            </div>
+          </div>
+        )}
+      />
     );
   }
 }
