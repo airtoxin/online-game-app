@@ -6,9 +6,9 @@ import {withFormik} from 'formik';
 import User from '../../../shared/models/User';
 import {WithSocket} from '../WithSocket';
 import {LoungePagePresenter} from './LoungePagePresenter';
-import {ChatState} from '../../../shared/models/ChatState';
+import {LoungeChatState} from '../../../shared/models/LoungeChatState';
 
-type ChatSocket = new () => WithSocket<ChatState>;
+type ChatSocket = new () => WithSocket<LoungeChatState>;
 const ChatSocket = WithSocket as ChatSocket;
 
 export interface Props {

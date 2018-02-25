@@ -1,8 +1,8 @@
-import {ChatState} from '../../shared/models/ChatState';
+import {LoungeChatState} from '../../shared/models/LoungeChatState';
 import {Action} from 'redux';
 import User from '../../shared/models/User';
 
-export {ChatState} from '../../shared/models/ChatState';
+export {LoungeChatState} from '../../shared/models/LoungeChatState';
 
 export enum ChatStateActionNames {
   UpdateChatState = 'chatState/UpdateChatState',
@@ -10,13 +10,13 @@ export enum ChatStateActionNames {
 
 export interface UpdateChatStateAction extends Action {
   type: ChatStateActionNames.UpdateChatState;
-  chatState: ChatState;
+  chatState: LoungeChatState;
 }
 
 export type ChatStateAction =
   | UpdateChatStateAction;
 
-const initialState: ChatState = {
+const initialState: LoungeChatState = {
   messages: [],
 };
 
@@ -28,7 +28,7 @@ export class ChatStateActionDispatcher {
   }
 }
 
-export default (state: ChatState = initialState, action: ChatStateAction): ChatState => {
+export default (state: LoungeChatState = initialState, action: ChatStateAction): LoungeChatState => {
   if (action.type === ChatStateActionNames.UpdateChatState) {
     return action.chatState;
   }

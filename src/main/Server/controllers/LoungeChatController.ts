@@ -1,21 +1,14 @@
 import User from '../../../shared/models/User';
-import {ChatMessage, ChatState} from '../../../shared/models/ChatState';
-import * as uuid from 'uuid';
+import {LoungeChatRepository} from '../repositories/LoungeChatRepository';
+import {LoungeChatState} from '../../../shared/models/LoungeChatState';
 
-let loungeChat: ChatState = {
-  messages: [],
-};
+const loungeChatRepository = new LoungeChatRepository();
 
 export class LoungeChatController {
-  async add(user: User, message: string): Promise<ChatState> {
-    const chatMessage: ChatMessage = {
-      id: uuid.v4(),
-      createdAt: new Date().toISOString(),
-      user,
-      message,
-    };
-    loungeChat.messages.push(chatMessage);
+  async add(user: User, message: string): Promise<LoungeChatState> {
+    await loungeChatRepository.save(user, message);
+    const loungeChatState = await loungeChatRepository.listAll();
 
-    return loungeChat;
+    return loungeChatState;
   }
 }

@@ -25,8 +25,8 @@ export default class Server {
       loungeChatNamespace.on('connect', socket => {
         const controller = new LoungeChatController();
         socket.on('add', async (user: User, message: string) => {
-          const loungeChat = await controller.add(user, message);
-          loungeChatNamespace.emit('update', loungeChat);
+          const loungeChatState = await controller.add(user, message);
+          loungeChatNamespace.emit('update', loungeChatState);
         });
       });
 

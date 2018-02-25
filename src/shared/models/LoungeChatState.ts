@@ -1,12 +1,12 @@
 import User from './User';
 
-export interface ChatMessage {
+export interface LoungeChatMessage {
   id: string;
   createdAt: string; // Date string
   message: string;
   user: User;
 }
 
-export interface ChatState {
-  messages: ChatMessage[];
+export interface LoungeChatState {
+  messages: LoungeChatMessage[];
 }
