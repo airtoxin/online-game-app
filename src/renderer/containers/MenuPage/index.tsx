@@ -5,7 +5,7 @@ import {withFormik} from 'formik';
 import CenterLayout from '../../components/CenterLayout/index';
 import * as styles from './styles.cssmodules';
 import {Dispatch} from 'redux';
-import {MenuPagePresenter} from './presenter';
+import {MenuPagePresenter} from './MenuPagePresenter';
 import {WebsocketActionDispatcher} from '../../modules/websocket';
 import {ServerActionDispatcher} from '../../modules/server';
 

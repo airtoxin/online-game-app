@@ -27,8 +27,8 @@ export default class Routes extends React.Component {
         <LoggedInRoute
           path='/lounge'
           exact
-          render={() => (
-            <LoungePage />
+          render={user => (
+            <LoungePage user={user} presenter={null as any}/>
           )}
         />
         <LoggedInRoute

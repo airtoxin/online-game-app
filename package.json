@@ -64,6 +64,7 @@
     "semantic-ui-react": "^0.77.2",
     "socket.io": "^2.0.4",
     "socket.io-client": "^2.0.4",
+    "utility-types": "^1.0.0",
     "uuid": "^3.2.1"
   },
   "devDependencies": {
