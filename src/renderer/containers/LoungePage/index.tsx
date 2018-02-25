@@ -1,18 +1,21 @@
 import * as React from 'react';
-import {connect} from 'react-redux';
-import {GlobalState} from '../../modules';
 import {Divider, Feed, Form} from 'semantic-ui-react';
 import {DraggableCore} from 'react-draggable';
 import * as styles from './styles.cssmodules';
 import {withFormik} from 'formik';
 import User from '../../../shared/models/User';
-import {ChatState} from '../../modules/chatState';
-import {LoungePagePresenter} from './LoungePagePresenter';
 import {WithSocket} from '../WithSocket';
+import {LoungePagePresenter} from './LoungePagePresenter';
+import {ChatState} from '../../../shared/models/ChatState';
+
+type ChatSocket = new () => WithSocket<ChatState>;
+const ChatSocket = WithSocket as ChatSocket;
 
 export interface Props {
   user: User;
-  chatState: ChatState;
+}
+
+export interface FormProps {
   presenter: LoungePagePresenter;
 }
 
@@ -24,7 +27,7 @@ export interface ChatSendFormValue {
   message: string;
 }
 
-const ChatSendForm = withFormik<Props, ChatSendFormValue>({
+const ChatSendForm = withFormik<Props & FormProps, ChatSendFormValue>({
   mapPropsToValues: () => ({ message: '' }),
   handleSubmit: async (values, {props, resetForm}) => {
     const user: User = { name: '', ...props.user };
@@ -60,49 +63,49 @@ class LoungePage extends React.Component<Props, State> {
 
   render() {
     return (
-      <WithSocket
+      <ChatSocket
         host='localhost'
         port={2008}
         path='lounge-chat'
-        render={() => (
-          <div className={styles.container}>
-            <div className={styles.mainArea}>
-              <h1>{this.props.user.name}</h1>
+        initialData={{ messages: [] }}
+        render={(socket, chatMessages) => {
+          const presenter = new LoungePagePresenter(socket);
+          return (
+            <div className={styles.container}>
+              <div className={styles.mainArea}>
+                <h1>{this.props.user.name}</h1>
+              </div>
+              <DraggableCore
+                onDrag={(_e, data) => this.setState({ heightDiff: this.state.heightDiff + data.deltaY })}
+              >
+                <Divider horizontal className={styles.divider}>
+                  ラウンジチャット
+                </Divider>
+              </DraggableCore>
+              <div>
+                <Feed className={styles.chatArea} style={{
+                  height: `calc(${defaultChatAreaHeight} - ${this.state.heightDiff}px)`,
+                }}>
+                  {
+                    chatMessages.messages.map(message => (
+                      <Feed.Event key={message.id}>
+                        <Feed.Label icon={message.user.id === this.props.user.id ? 'user' : 'user outline'} />
+                        <Feed.Content>
+                          {message.message}
+                        </Feed.Content>
+                        <Feed.Date>{message.createdAt}</Feed.Date>
+                      </Feed.Event>
+                    ))
+                  }
+                </Feed>
+                <ChatSendForm {...this.props} presenter={presenter}/>
+              </div>
             </div>
-            <DraggableCore
-              onDrag={(_e, data) => this.setState({ heightDiff: this.state.heightDiff + data.deltaY })}
-            >
-              <Divider horizontal className={styles.divider}>
-                ラウンジチャット
-              </Divider>
-            </DraggableCore>
-            <div>
-              <Feed className={styles.chatArea} style={{
-                height: `calc(${defaultChatAreaHeight} - ${this.state.heightDiff}px)`,
-              }}>
-                {
-                  this.props.chatState.messages.map(message => (
-                    <Feed.Event key={message.id}>
-                      <Feed.Label icon={message.user.id === this.props.user.id ? 'user' : 'user outline'} />
-                      <Feed.Content>
-                        {message.message}
-                      </Feed.Content>
-                      <Feed.Date>{message.createdAt}</Feed.Date>
-                    </Feed.Event>
-                  ))
-                }
-              </Feed>
-              <ChatSendForm {...this.props}/>
-            </div>
-          </div>
-        )}
+          );
+        }}
       />
     );
   }
 }
 
-const mapStateToProps = (state: GlobalState) => ({
-  chatState: state.chatState,
-});
-
-export default connect(mapStateToProps)(LoungePage);
+export default LoungePage;

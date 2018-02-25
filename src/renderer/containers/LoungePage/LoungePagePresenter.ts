@@ -1,13 +1,12 @@
 import User from '../../../shared/models/User';
 import {ChatSendFormValue} from './index';
-import {ChatStateActionDispatcher} from '../../modules/chatState';
 
 export class LoungePagePresenter {
   constructor(
-    private chatStateActionDispatcher: ChatStateActionDispatcher
+    private loungeChatSocket: SocketIOClient.Socket
   ) {}
 
   async handleSubmitChatMessage(user: User, values: ChatSendFormValue): Promise<void> {
-    await this.chatStateActionDispatcher.sendChatMessage(user, values.message);
+    this.loungeChatSocket.emit('add', user, values.message);
   }
 }
