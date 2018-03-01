@@ -5,10 +5,12 @@ import {LoungeChatState} from '../../../shared/models/LoungeChatState';
 const loungeChatRepository = new LoungeChatRepository();
 
 export class LoungeChatController {
+  async get(): Promise<LoungeChatState> {
+    return await loungeChatRepository.listAll();
+  }
+
   async add(user: User, message: string): Promise<LoungeChatState> {
     await loungeChatRepository.save(user, message);
-    const loungeChatState = await loungeChatRepository.listAll();
-
-    return loungeChatState;
+    return await loungeChatRepository.listAll();
   }
 }

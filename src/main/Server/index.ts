@@ -22,8 +22,10 @@ export default class Server {
 
       // lounge-chat routes
       const loungeChatNamespace = io.of('/lounge-chat');
-      loungeChatNamespace.on('connect', socket => {
+      loungeChatNamespace.on('connect', async socket => {
         const controller = new LoungeChatController();
+
+        socket.emit('update', await controller.get());
         socket.on('add', async (user: User, message: string) => {
           const loungeChatState = await controller.add(user, message);
           loungeChatNamespace.emit('update', loungeChatState);
