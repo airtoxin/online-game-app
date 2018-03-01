@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {reverse} from 'lodash';
 import {Divider, Feed, Form} from 'semantic-ui-react';
 import {DraggableCore} from 'react-draggable';
 import * as styles from './styles.cssmodules';
@@ -87,7 +88,7 @@ class LoungePage extends React.Component<Props, State> {
                   height: `calc(${defaultChatAreaHeight} - ${this.state.heightDiff}px)`,
                 }}>
                   {
-                    chatMessages.messages.map(message => (
+                    reverse(chatMessages.messages).map(message => (
                       <Feed.Event key={message.id}>
                         <Feed.Label icon={message.user.id === this.props.user.id ? 'user' : 'user outline'} />
                         <Feed.Content>
