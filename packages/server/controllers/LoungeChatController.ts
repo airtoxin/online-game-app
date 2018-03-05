@@ -1,6 +1,6 @@
-import User from '../../../src/shared/models/User';
+import User from '../../domain/models/User';
 import {LoungeChatRepository} from '../repositories/LoungeChatRepository';
-import {LoungeChatState} from '../../../src/shared/models/LoungeChatState';
+import {LoungeChatState} from '../../domain/models/LoungeChatState';
 
 const loungeChatRepository = new LoungeChatRepository();
 

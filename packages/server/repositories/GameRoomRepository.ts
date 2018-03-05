@@ -1,5 +1,5 @@
-import {GameRoom} from '../../../src/shared/models/GameRoom';
-import User from '../../../src/shared/models/User';
+import {GameRoom} from '../../domain/models/GameRoom';
+import User from '../../domain/models/User';
 import * as uuid from 'uuid';
 import * as lodash from 'lodash';
 

@@ -4,7 +4,7 @@ import * as cors from 'cors';
 import * as SocketIo from 'socket.io';
 import {StatusController} from './controllers/StatusController';
 import {LoungeChatController} from './controllers/LoungeChatController';
-import User from '../../src/shared/models/User';
+import User from '../domain/models/User';
 
 export class Server {
   bootUp(host: string, port: number): Promise<void> {

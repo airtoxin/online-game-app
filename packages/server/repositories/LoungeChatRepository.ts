@@ -1,5 +1,5 @@
-import {LoungeChatMessage, LoungeChatState} from '../../../src/shared/models/LoungeChatState';
-import User from '../../../src/shared/models/User';
+import {LoungeChatMessage, LoungeChatState} from '../../domain/models/LoungeChatState';
+import User from '../../domain/models/User';
 import * as uuid from 'uuid';
 
 const state: LoungeChatState = {
