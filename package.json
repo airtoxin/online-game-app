@@ -5,7 +5,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "start": "run-p dev",
-    "start:server": "yarn --cwd packages/server/ start",
+    "start:server": "cd packages/server/ && ts-node cli.ts",
     "dev": "run-p dev:css:watch dev:app",
     "dev:css": "tcm --pattern 'src/renderer/**/*.cssmodules'",
     "dev:css:watch": "npm run dev:css -- --watch",
