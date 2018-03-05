@@ -1,0 +1,22 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "ts-node cli.ts"
+  },
+  "dependencies": {
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "socket.io": "^2.0.4",
+    "uuid": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.3",
+    "@types/express": "^4.11.0",
+    "@types/socket.io": "^1.4.31",
+    "@types/uuid": "^3.4.3",
+    "ts-node": "^5.0.1",
+    "typescript": "^2.7.2"
+  }
+}
