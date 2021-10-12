@@ -88,7 +88,7 @@
     "@types/socket.io-client": "^1.4.32",
     "@types/uuid": "^3.4.3",
     "css-loader": "^0.28.9",
-    "electron": "^1.7.11",
+    "electron": "^11.5.0",
     "electron-builder": "^19.55.2",
     "electron-rebuild": "^1.7.3",
     "electron-webpack": "^1.9.0",
